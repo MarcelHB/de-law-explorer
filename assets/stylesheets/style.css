@@ -1,0 +1,278 @@
+/* SPDX-License-Identifier: GPL-3.0 */
+
+html, input {
+    font-family: Helvetica,Arial,Verdana,sans-serif;
+    font-size: 13px;
+}
+
+/* shows book title */
+#title {
+    width: 700px;
+    overflow: hidden;
+    margin: 0 auto;
+    font-size: 15px;
+    text-decoration: underline;
+}
+
+/* contains all content */
+#canvas {
+    width: 700px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+#load-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+    background-color: black;
+    z-index: 100;
+}
+
+#load-mask-text {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 101;
+    display: table;
+    vertical-align: middle;
+}
+
+#load-mask-text .load-btn {
+    width: 100px;
+    margin: 0 auto;
+    height: 50px;
+    background-color: black;
+    border-radius: 4px;
+    display: table;
+}
+
+#load-mask-text .load-btn .load-btn-text {
+    color: white;
+    margin: 0 auto;
+    font-size: 110%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.middling-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* wraps infoBox and textBox */
+.wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* shows code atom related information */
+.infoBox {
+    width: 100px;
+    float: left;
+    : #808080;
+    padding: 5px 2px 0px;
+    white-space: nowrap;
+}
+
+/* shows text */
+.textBox {
+    overflow: hidden;
+    padding: 5px 0px 0px;
+    white-space: nowrap;
+}
+
+/* shows "show more..." link */
+.showMoreBox {
+    width: 100%;
+    padding: 5px 0px 0px;
+    text-align: center;
+}
+
+/* shows short book title */
+.shortBox {
+    width: 100px;
+    overflow: hidden;
+    float: left;
+    color: #808080;
+    padding: 5px 5px 0px 0px;
+    word-break: break-all;
+}
+
+/* shows book title on index page */
+.codeBox {
+    overflow: hidden;
+    padding: 5px 0px 0px;
+}
+
+/* shows A-Z, 0-9 */
+.codeHeader {
+    width: 100%;
+    padding: 5px 0px 20px;
+}
+
+/* shows title paragraphs belong to */
+.indexBoxHeader {
+    width: 100%;
+    padding: 5px 0px 0px;
+}
+
+/* shows paragraphs */
+.indexBox {
+    width: 100%;
+    padding: 5px 3px 0px;
+}
+
+.previewBox0, .previewBox1, .previewBox2 {
+    display: none;
+}
+
+.previewBox0 {
+    background-color: #ffffff;
+}
+
+.previewBox1 {
+}
+
+.previewBox2 {
+}
+
+.levelBox0 {
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.levelBox1, .levelBox2 {
+    width: 96%;
+    margin: 0 auto;
+    padding: 5px 0px 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.levelBox1 {
+    border: 1px solid #cbcbcb;
+}
+
+.levelBox2 {
+    background-color: #efefef;
+}
+
+.backLinkBox {
+    padding-top: 3px;
+}
+
+.backLinksBox {
+    position: absolute;
+    min-width: 200px;
+    background-color: rgba(245, 245, 220, 0.93);
+    border: 1px solid black;
+    padding: 5px;
+    display: none;
+}
+
+.backLinksBoxHeader {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.link {
+    border-radius: 5px 5px 0px 0px;
+    padding: 3px 3px 0px;
+}
+
+.link.link-level1 {
+    border: 1px solid #cbcbcb;
+    border-bottom: 0;
+}
+
+.link.link-level2 {
+    border: 1px solid transparent;
+    background-color: #efefef;
+}
+
+.indexLink.hl {
+    font-weight: bold;
+    font-size: 110%;
+}
+
+a, .like-link {
+    text-decoration: none;
+    color: #5e73be;
+    cursor: pointer;
+}
+
+.previewHoverBox {
+    position: absolute;
+    min-width: 200px;
+    min-height: 200px;
+    background-color: gray;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.table {
+    width: 90%;
+    border: 1px solid black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-rigth: auto;
+}
+
+.tableRow {
+    background-color: rgba(245, 245, 220, 0.93);
+}
+
+.inline-loader {
+    text-align: center;
+    font-weight: bold;
+}
+
+.icl-header {
+    text-align: center;
+}
+
+#icl-code-from, #icl-code-to {
+    font-weight: bold;
+}
+
+.table {
+    display: table;
+}
+
+.table .tbl-head, .table .tbl-row {
+    display: table-row;
+}
+
+.table .tbl-cell {
+    display: table-cell;
+}
+
+.table .tbl-head {
+    font-weight: bold;
+}
+
+.icl-col-1, .icl-col-3 {
+    width: 40%
+}
+
+.icl-col-2 {
+    font-size: 200%;
+    text-align: center;
+}
+
+.icl-table {
+    padding: 4px;
+}
+
+.icl-table .name {
+    font-size: 70%;
+    text-transform: uppercase;
+    color: #666;
+}

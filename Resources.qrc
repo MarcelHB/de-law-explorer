@@ -1,0 +1,13 @@
+<!-- SPDX-License-Identifier: GPL-3.0 -->
+<RCC>
+    <qresource prefix="/">
+        <file>assets/javascripts/custom.js</file>
+        <file>assets/javascripts/jquery-1.11.1.min.js</file>
+        <file>assets/javascripts/qt.js</file>
+        <file>assets/stylesheets/style.css</file>
+        <file>assets/images/magnify.png</file>
+        <file>assets/html/index.html</file>
+        <file>assets/text/copyrights.txt</file>
+        <file>assets/text/terms.txt</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,386 @@
+# SPDX-License-Identifier: GPL-3.0
+module Grammar
+  grammar RefDE
+    rule root
+      paragraph / absatz / satz / nummer / gesetz / artikel / anlage
+    end
+
+    rule paragraph
+      p_sym [\s]+ p_chars <Paragraph>
+    end
+
+    rule p_sym
+      "§§" / "§" <TextMarker>
+    end
+
+    rule p_chars
+      (p_chars_sep / p_chars_bin / p_chars_ran / p_chars_sub / p_char) <ParagraphChars>
+    end
+
+    rule p_chars_sep
+      p_char "," [\s]* p_chars <ParagraphSep>
+    end
+
+    rule p_chars_bin
+      p_char " und " p_chars <ParagraphBin>
+    end
+
+    rule p_chars_ran
+      p_char " bis " p_chars <ParagraphRange>
+    end
+
+    rule p_chars_sub
+      p_char paragraph_subs <ParagraphSub>
+    end
+
+    rule p_char
+      [0-9] [0-9a-z]* <ParagraphChar>
+    end
+
+    rule paragraph_subs
+      paragraph_subs_types? paragraph_subs_gesetz? <ParagraphSubs>
+    end
+
+    rule paragraph_subs_types
+      (paragraph_subs_absatz / paragraph_subs_nummer / paragraph_subs_satz) <ParagraphSubsType>
+    end
+
+    rule paragraph_subs_absatz
+      paragraph_subs_absatz_pre? absatz <ParagraphSubsAbs>
+    end
+
+    rule paragraph_subs_absatz_pre
+      indenter (paragraph_absatz_pronouns [\s]+)? <ParagraphSubsAbsPre>
+    end
+
+    rule paragraph_subs_nummer
+      indenter nummer <ParagraphSubsNum>
+    end
+
+    rule paragraph_subs_gesetz
+      indenter gesetz <ParagraphSubsGesetz>
+    end
+
+    rule paragraph_subs_satz
+      indenter satz <ParagraphSubsSatz>
+    end
+
+    rule paragraph_absatz_pronouns
+      "nach den" <TextMarker>
+    end
+
+    rule absatz
+      absatz_sym [\s]+ abs_chars <Absatz>
+    end
+
+    rule re_pronouns
+      "des" / "der" / "den" / "die" <TextMarker>
+    end
+
+    rule absatz_sym
+       "Absatz" "es"? / "Absätze" "n"? / "Abs." <TextMarker>
+    end
+
+    rule abs_chars
+      (abs_chars_sep / abs_chars_bin / abs_chars_ran / abs_chars_subs / abs_char) <AbsatzChars>
+    end
+
+    rule abs_chars_sep
+      abs_char abs_sub? "," [\s]* abs_re? abs_chars <AbsatzSep>
+    end
+
+    rule abs_chars_bin
+      abs_char abs_sub? bin_op abs_re? abs_chars <AbsatzBin>
+    end
+
+    rule abs_chars_ran
+      abs_char " bis " abs_chars <AbsatzRange>
+    end
+
+    rule abs_chars_subs
+      abs_char [\s]+ abs_subs <AbsatzSub>
+    end
+
+    rule bin_op
+      " und " / " u. " / " oder " / " sowie " / " in Verbindung mit " <BinOp>
+    end
+
+    rule abs_re
+      (re_pronouns [\s]+)? absatz_sym [\s]+ <TextMarker>
+    end
+
+    rule abs_char
+      [0-9] [0-9a-z]* <AbsatzChar>
+    end
+
+    rule abs_sub
+      indenter abs_subs <AbsatzISub>
+    end
+
+    rule abs_subs
+      (satz / nummer) <AbsatzSubs>
+    end
+
+    rule satz
+      satz_sym [\s]+ satz_chars <Satz>
+    end
+   
+    rule satz_sym
+      "Satz" "es"? / "Sätze" "n"? <TextMarker>
+    end
+
+    rule satz_chars
+      (satz_chars_sep / satz_chars_bin / satz_chars_ran / satz_chars_sub / satz_char) <SatzChars>
+    end
+
+    rule satz_chars_sep
+      satz_char satz_sub? "," [\s]* satz_re? satz_chars <SatzSep>
+    end
+
+    rule satz_chars_bin
+      satz_char satz_sub? bin_op satz_re? satz_chars <SatzBin>
+    end
+
+    rule satz_chars_ran
+      satz_char " bis " satz_chars <SatzRange>
+    end
+
+    rule satz_chars_sub
+      satz_char [\s]+ satz_subs <SatzSub>
+    end
+
+    rule satz_re
+      (satz_re_text [\s]+)? satz_sym [\s]+ <TextMarker>
+    end
+
+    rule satz_re_text
+      (conjunction_prosa ([\s]+ re_pronouns)? / re_pronouns)
+    end
+
+    rule conjunction_prosa
+      "auch "? "in Verbindung mit" <TextMarker>
+    end
+
+    rule satz_char
+      [0-9] [0-9]* <SatzChar>
+    end
+
+    rule satz_sub
+      indenter satz_subs <SatzISub>
+    end
+
+    rule satz_subs
+      nummer <SatzSubs>
+    end
+
+    rule nummer
+      nummer_core num_iin_anlage? <Nummer>
+    end
+
+    rule nummer_core
+      (num_sym [\s]+ num_chars / char_sym [\s]+ char_chars) <NummerCore>
+    end
+
+    rule num_iin_anlage
+      indenter num_in_anlage <NummerIAnlage>
+    end
+
+    rule num_in_anlage
+      ("der" [\s]+)? anlage <NummerAnlage>
+    end
+
+    rule num_sym
+      "Nr." / "Nummer" "n"? <TextMarker>
+    end
+
+    rule num_chars
+      (num_chars_sep / num_chars_bin / num_chars_ran / num_chars_sub / num_char) <NummerChars>
+    end
+
+    rule num_chars_sep
+      num_char num_isub? "," [\s]* num_re? num_chars <NummerSep>
+    end
+
+    rule indenter
+      [\s]+ <Indenter>
+    end
+
+    rule num_chars_bin
+      num_char num_isub? bin_op num_re? num_chars <NummerBin>
+    end
+
+    rule num_chars_ran
+      num_char " bis " num_chars <NummerRange>
+    end
+
+    rule num_chars_sub
+      num_char [\s]+ num_subs <NummerSub>
+    end
+
+    rule num_re
+      (re_pronouns [\s]+)? num_sym [\s]+ <TextMarker>
+    end
+
+    # "/" at the end suppresses "Nr. X/2010" things from the EU
+    rule num_char
+      [0-9] [0-9a-z]* ![\/] <NummerChar>
+    end
+
+    rule num_isub
+      indenter num_subs <NummerISub>
+    end
+
+    rule num_subs
+      (satz / nummer) <NummerSubs>
+    end
+
+    rule char_sym
+      "Buchstabe" "n"? / "Doppelbuchstabe" "n"? <TextMarker>
+    end
+
+    rule char_chars
+      (char_chars_sep / char_chars_bin / char_chars_ran / char_chars_sub / char_char) <CharChars>
+    end
+
+    rule char_chars_sep
+      char_char char_sub? "," [\s]* char_re? char_chars <CharSep>
+    end
+
+    rule char_chars_bin
+      char_char char_sub? bin_op char_re? char_chars <CharBin>
+    end
+
+    rule char_chars_ran
+      char_char " bis " char_chars <CharRange>
+    end
+
+    rule char_chars_sub
+      char_char [\s]+ char_subs <CharSub>
+    end
+
+    rule char_re
+      (re_pronouns [\s]+)? char_sym [\s]+ <TextMarker>
+    end
+
+    rule char_char
+      !re_pronouns [a-z]+ <CharChar>
+    end
+
+    rule char_sub
+      indenter char_subs <CharISub>
+    end
+
+    rule char_subs
+      (satz / nummer) <CharSubs>
+    end
+
+    rule gesetz
+      (gesetz_short_sym / gesetz_rep) <GesetzCode>
+    end
+
+    rule gesetz_rep
+      [A-ZÄÖÜ] gesetz_candidate / [a-zA-Z0-9öäüßÄÖÜ\s-] gesetz_rep / gesetz_candidate
+    end
+
+    rule gesetz_candidate
+      gesetz_sym / [a-zöäüß] gesetz_candidate
+    end
+
+    rule gesetz_sym
+      ("Gesetz" / "gesetz" !("t" [\W])) ("es" / ("buch" ("es"/ "s")?))? / "ordnung" !("swidrig" [\W]) / "Ordnung" !("swidrigkeit" [\W]) / "verfügung"
+    end
+
+    # "SGB X"
+    rule gesetz_short_sym
+      [A-ZÖÄÜ] gesetz_short_sym_tail gesetz_short_sym_latin?
+    end
+
+    rule gesetz_short_sym_tail
+      [A-ZÖÄÜ] gesetz_short_sym_tail / [a-zöäüß0-9] gesetz_short_sym_tail / [A-ZÄÖÜ]
+    end
+
+    rule gesetz_short_sym_latin
+      indenter [XVI]+
+    end
+
+    rule artikel
+      artikel_sym [\s]+ artikel_chars <Artikel>
+    end
+
+    rule artikel_sym
+      "Artikel" ("s" / "n")? / "Art." <TextMarker>
+    end
+
+    rule artikel_chars
+      (artikel_sep / artikel_bin / artikel_ran / artikel_sub / artikel_char) <ArtikelChars>
+    end
+
+    rule artikel_sep
+      artikel_char "," [\s]* artikel_chars <ArtikelSep>
+    end
+
+    rule artikel_bin
+      artikel_char " und " artikel_chars <ArtikelBin>
+    end
+
+    rule artikel_ran
+      artikel_char " bis " artikel_chars <ArtikelRange>
+    end
+
+    rule artikel_sub
+      artikel_char [\s]+ artikel_subs <ArtikelSub>
+    end
+
+    rule artikel_char
+      [0-9] [a-z0-9]* <ArtikelChar>
+    end
+
+    rule artikel_subs
+      (absatz / nummer) <ArtikelSubs>
+    end
+
+    rule artikel_subs_types
+      (artikel_subs_absatz / artikel_subs_nummer / artikel_subs_satz) <ArtikelSubsType>
+    end
+
+    rule artikel_subs_absatz
+      artikel_subs_absatz_pre? absatz <ArtikelSubsAbs>
+    end
+
+    rule artikel_subs_absatz_pre
+      indenter (artikel_absatz_pronouns [\s]+)? <ArtikelSubsAbsPre>
+    end
+
+    rule anlage
+      anlage_sym [\s]+ anlage_chars <Anlage>
+    end
+
+    rule artikel_subs_nummer
+      indenter nummer <ArtikelSubsNum>
+    end
+
+    rule artikel_subs_gesetz
+      indenter gesetz <ArtikelSubsGesetz>
+    end
+
+    rule artikel_subs_satz
+      indenter satz <ArtikelSubsSatz>
+    end
+
+    rule artikel_absatz_pronouns
+      "nach den" <TextMarker>
+    end
+
+    rule anlage_sym
+      "Anlage" <TextMarker>
+    end
+
+    rule anlage_chars
+      anlage_char <AnlageChars>
+    end
+
+    rule anlage_char
+      [0-9] [a-z0-9]* <AnlageChar>
+    end
+  end
+end
